@@ -55,21 +55,60 @@ router.post('/lists/:id/cards', ensureLoggedInApiVersion, (req, res, next) => {
 
 
 router.patch('/api/cards/:id', (req, res, next) => {
-  CardModel.findByIdAndUpdate(
+  CardModel.findById(
     req.params.id,
-    {
-      title: req.body.cardTitle,
-      description: req.body.cardDescription,
-      dueDate: req.body.dueDate
-    },
-    { new: true},  //gives us the updated "cardFromDB"
     (err, cardFromDB) => {
       if (err) {
-        res.status(500).json({ message: "Card update didn't work"});
+        res.status(500).json({ message: "Card find didn't work"});
+        return;
+      }
+      // if(req.body.cardTitle) {
+      //   cardFromDB.title = req.body.cardTitle;
+      // }
+      cardFromDB.title = req.body.cardTitle || cardFromDB.title;
+
+
+      if(req.body.cardDescription) {
+        cardFromDB.description = req.body.cardDescription;
       }
 
-      res.status(200).json(cardFromDB);
+      if(req.body.cardDueDate) {
+        cardFromDB.dueDate = req.body.cardDueDate;
+      }
+
+      cardFromDB.save(() => {
+        if (err) {
+          res.status(500).json({ message: "Card save didn't work"});
+          return;
+        }
+
+        res.status(200).json(cardFromDB);
+      });
+    }
+  ); //close findByID
+});
+
+router.delete('/api/cards/:id', (req, res, next) => {
+  CardModel.findByIdAndRemove(
+    req.params.id,
+    (err, cardFromDB) => {
+      if (err) {
+        res.status(500).json({ message: 'Card remove didnt work'});
+        return;
+      }
+
+      ListModel.findByIdAndUpdate(
+        cardFromDB.list,
+        { $pull: { cards: cardsFromDB._id} },
+        (err) => {
+          if (err) {
+            res.status(500).json({ message: 'List update didnt work'});
+            return;
+          }
+        }
+      );
     }
   );
 });
+
 module.exports = router;
