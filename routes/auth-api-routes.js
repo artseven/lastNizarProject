@@ -84,4 +84,9 @@ router.post('/api/login', (req, res, next) => {
 
   myFunction(req, res, next);
 });
+
+router.post('/logout', (req, res, next) => {
+  req.logout();
+  res.status(200).json({ message: 'Success'});
+});
 module.exports = router;
