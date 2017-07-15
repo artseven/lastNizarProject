@@ -51,6 +51,9 @@ app.use('/', myAuthStuff);
 
 const myListStuff = require('./routes/list-api-routes');
 app.use('/', myListStuff);
+
+const myCardStuff = require('./routes/card-api-routes');
+app.use('/', myCardStuff);
 // -----------------------------------------------------------------------------
 
 
