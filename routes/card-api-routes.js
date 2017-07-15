@@ -105,6 +105,8 @@ router.delete('/api/cards/:id', (req, res, next) => {
             res.status(500).json({ message: 'List update didnt work'});
             return;
           }
+
+          res.status(200).json(cardFromDB);
         }
       );
     }
