@@ -58,7 +58,7 @@ router.post('/api/signup', (req, res, next) => {
 
 
 router.post('/api/login', (req, res, next) => {
-  passport.authenticate('local', (err, theUser, failureDetails) => {
+  const myFunction = passport.authenticate('local', (err, theUser, failureDetails) => {
     console.log(failureDetails);
     if (err) {
       res.status(500).json ({ message: 'Something went wrong'});
@@ -77,7 +77,11 @@ router.post('/api/login', (req, res, next) => {
         res.status(500).json({ message: 'Passport login failed'});
         return;
       }
+
+      res.status(200).json(theUser);
     });
   });
+
+  myFunction(req, res, next);
 });
 module.exports = router;
