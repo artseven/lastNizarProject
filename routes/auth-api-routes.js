@@ -59,7 +59,25 @@ router.post('/api/signup', (req, res, next) => {
 
 router.post('/api/login', (req, res, next) => {
   passport.authenticate('local', (err, theUser, failureDetails) => {
+    console.log(failureDetails);
+    if (err) {
+      res.status(500).json ({ message: 'Something went wrong'});
+      return;
+    }
 
+    if (!theUser) {
+      // failureDetails contains the error messages
+      // from our logic in LocalStrategy.
+      res.status(401).json(failureDetails);
+      return;
+    }
+
+    req.login(theUser, (err) => {
+      if (err) {
+        res.status(500).json({ message: 'Passport login failed'});
+        return;
+      }
+    });
   });
 });
 module.exports = router;
