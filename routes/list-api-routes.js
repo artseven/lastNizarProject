@@ -27,8 +27,28 @@ router.post('/api/lists', (req, res, next) => {
       owner: req.user._id,
 
     });
-  });//Close exec callback
 
+    theList.save((err) => {
+      if (err) {
+        res.status(500).json({ message: "List save went to shit"});
+      }
+    });
+  });//Close exec callback
+});//Close post('/api/lists')
+
+
+router.get('/api/lists', (req, res, next) => {
+  ListModel
+  .find({ owner: req.user._id})
+  .populate('cards')
+  .exec((err, allTheLists) => {
+    if (err) {
+      res.status(500).json({ message: "List find catched an error"});
+      return;
+    }
+
+    res.status(200).json(allTheLists);
+  });
 });
 
 module.exports = router;

@@ -8,7 +8,7 @@ const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
 const session      = require('express-session');
 const passport     = require('passport');
-
+const cors         = require('cors');
 require('dotenv').config();
 
 require('./config/passport-config');
@@ -39,7 +39,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(cors());
 
 
 // ROUTES GO HERE --------------------------------------------------------------
@@ -48,6 +48,9 @@ app.use('/', index);
 
 const myAuthStuff = require('./routes/auth-api-routes');
 app.use('/', myAuthStuff);
+
+const myListStuff = require('./routes/list-api-routes');
+app.use('/', myListStuff);
 // -----------------------------------------------------------------------------
 
 
