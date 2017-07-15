@@ -62,10 +62,13 @@ router.patch('/api/cards/:id', (req, res, next) => {
       description: req.body.cardDescription,
       dueDate: req.body.dueDate
     },
+    { new: true},  //gives us the updated "cardFromDB"
     (err, cardFromDB) => {
       if (err) {
-        res.status(500).json();
+        res.status(500).json({ message: "Card update didn't work"});
       }
+
+      res.status(200).json(cardFromDB);
     }
   );
 });
