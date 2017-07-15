@@ -25,9 +25,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
 
+// routes-----------------------------
 const index = require('./routes/index');
 app.use('/', index);
 
+const myAuthSTuff = require('./routes/auth-api-routes');
+app.use('/', myAuthSTuff);
+//-------------------------------------
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
