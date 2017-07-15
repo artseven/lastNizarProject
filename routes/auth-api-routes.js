@@ -85,8 +85,19 @@ router.post('/api/login', (req, res, next) => {
   myFunction(req, res, next);
 });
 
-router.post('/logout', (req, res, next) => {
+router.post('/api/logout', (req, res, next) => {
   req.logout();
   res.status(200).json({ message: 'Success'});
 });
+
+router.get('/api/checklogin', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json(req.user);
+    return;
+  }
+
+  res.status(403).json({ message: 'Unathorized'});
+});
+
+
 module.exports = router;
