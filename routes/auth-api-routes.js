@@ -1,7 +1,9 @@
-const express = require('express');
-const router  = express.Router();
-const bcrypt  = require('bcrypt');
 const UserModel = require('../models/user-model');
+const passport  = require('passport');
+const express = require('express');
+const bcrypt  = require('bcrypt');
+const router  = express.Router();
+
 router.post('/api/signup', (req, res, next) => {
   const theFullName = req.body.signupFullName;
   const theEmail = req.body.signupEmail;
@@ -54,4 +56,10 @@ router.post('/api/signup', (req, res, next) => {
   );
 });
 
+
+router.post('/api/login', (req, res, next) => {
+  passport.authenticate('local', (err, theUser, failureDetails) => {
+
+  });
+});
 module.exports = router;

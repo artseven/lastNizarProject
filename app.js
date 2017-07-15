@@ -5,7 +5,15 @@ const logger       = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
+const mongoose     = require('mongoose');
+const session      = require('express-session');
+const passport     = require('passport');
 
+require('dotenv').config();
+
+require('./config/passport-config');
+
+mongoose.connect(process.env.MONGODB_URI);
 
 const app = express();
 
@@ -24,14 +32,25 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
+app.use(session({
+  secret: 'something something something trello',
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
-// routes-----------------------------
+
+
+// ROUTES GO HERE --------------------------------------------------------------
 const index = require('./routes/index');
 app.use('/', index);
 
-const myAuthSTuff = require('./routes/auth-api-routes');
-app.use('/', myAuthSTuff);
-//-------------------------------------
+const myAuthStuff = require('./routes/auth-api-routes');
+app.use('/', myAuthStuff);
+// -----------------------------------------------------------------------------
+
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');
