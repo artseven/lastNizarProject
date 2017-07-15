@@ -1,3 +1,3 @@
-const mongoose = requre('mongoose');
+const mongoose = require('mongoose');
 
-const Schema )
+const Schema = mongoose.Schema;
