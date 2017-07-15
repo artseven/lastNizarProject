@@ -35,7 +35,22 @@ router.post('/lists/:id/cards', ensureLoggedInApiVersion, (req, res, next) => {
         res.status(500).json({ message: "Card save went to shit"});
       }
 
+      ListModel.findByIdAndUpdate(
+        req.params.id,
+        { $push: {cards: theCard._id} },
+        (err, listFromDb) => {
+          if (err) {
+            res.status(500).json({ message: 'List update went to'});
+            return;
+          }
+
+          res.status(200).json(theCard);
+        }
+      );
+
       res.status(200).json(theCard);
     });
   });//Close exec callback
 });//Close post('/lists/:id/cards')
+
+module.exports = router;

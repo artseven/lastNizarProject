@@ -10,7 +10,7 @@ passport.serializeUser((userFromDb, next) => {
 });
 
 passport.deserializeUser((idFromSession, next) => {
-  UserModel.findByID(
+  UserModel.findById(
     idFromSession,
 
     (err, userFromDb) => {
