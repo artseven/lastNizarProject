@@ -1,12 +1,17 @@
+const ensureLoggedInApiVersion = require('../lib/ensure-logged-in-api-version');
 const ListModel = require('../models/list-model');
+const CardModel = require('../models/card-model');
 const express = require('express');
 const router = express.Router();
 
-router.post('/api/lists', (req, res, next) => {
+
+
+
+router.post('/api/lists', ensureLoggedInApiVersion, (req, res, next) => {
   ListModel
   .findOne({ owner: req.user._id})
   // -1 means opposite order
-  .order({ position: -1})
+  .sort({ position: -1})
   //Tell mongo to execute query
   .exec((err, lastList) => {
     if (err) {
@@ -37,7 +42,7 @@ router.post('/api/lists', (req, res, next) => {
 });//Close post('/api/lists')
 
 
-router.get('/api/lists', (req, res, next) => {
+router.get('/api/lists', ensureLoggedInApiVersion, (req, res, next) => {
   ListModel
   .find({ owner: req.user._id})
   .populate('cards')
