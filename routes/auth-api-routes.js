@@ -7,7 +7,7 @@ router.post('/api/signup', (req, res, next) => {
   const theEmail = req.body.signupEmail;
   const thePassword = req.body.signupPassword;
 
-  if (!theUsername || !thePassword) {
+  if (!theEmail || !thePassword) {
     res.status(400).json( { message: 'Please provide an email & password'});
     return;
   }
@@ -40,6 +40,15 @@ router.post('/api/signup', (req, res, next) => {
         res.status(500).json ({ message: 'Oops,backend failed'});
         return;
       }
+    // Log in the user automatically after signup
+      req.login(theUser, (err) => {
+        if (err) {
+          res.status(500).json ({ message: 'Oops,log in failed'});
+          return;
+        }
+
+        res.status(200).json(theUser);
+      });
     });
   }
   );
