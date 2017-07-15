@@ -1,1 +1,5 @@
+//Environmental variables
+.env
+
+//Node packages
 node_modules
