@@ -53,4 +53,20 @@ router.post('/lists/:id/cards', ensureLoggedInApiVersion, (req, res, next) => {
   });//Close exec callback
 });//Close post('/lists/:id/cards')
 
+
+router.patch('/api/cards/:id', (req, res, next) => {
+  CardModel.findByIdAndUpdate(
+    req.params.id,
+    {
+      title: req.body.cardTitle,
+      description: req.body.cardDescription,
+      dueDate: req.body.dueDate
+    },
+    (err, cardFromDB) => {
+      if (err) {
+        res.status(500).json();
+      }
+    }
+  );
+});
 module.exports = router;
